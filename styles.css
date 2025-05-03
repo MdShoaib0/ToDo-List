@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+body {
+    width: 100vw;
+    height: auto;
+    background-color: rgb(161, 220, 221);
+}
+
+header {
+    width: 100%;
+    height: auto;
+    background-color: rgb(13, 126, 71);
+}
+
+header>h1 {
+    color: silver;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+
+main {
+    width: 100%;
+    height: auto;
+    padding-top: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Form Styling */
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+form>input {
+    width: 85%;
+    height: 3.3rem;
+    padding: 0 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 9px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+}
+
+form>select {
+    width: 85%;
+    height: 3.3rem;
+    padding: 0 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 9px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 15px;
+    font-size: 1rem;
+}
+
+form>textarea {
+    width: 85%;
+    height: 7rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+}
+
+form>button {
+    width: 85%;
+    height: 3.3rem;
+    background-color: red;
+    color: silver;
+    border: none;
+    border-radius: 9px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
