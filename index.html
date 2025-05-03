@@ -15,14 +15,14 @@
 </head>
 
 <body>
-    <Header>
+    <header>
         <h1>Daily Task ToDo</h1>
-    </Header>
+    </header>
 
     <main>
-        <form>
+        <form onsubmit="CreateTask(event)">
 
-            <input type="text" required placeholder="Task Title">
+            <input id="INPUT" type="text" required placeholder="Task Title">
 
             <select name="" id="Categories">
                 <option value="">Categories</option>
@@ -32,14 +32,26 @@
                 <option value="Daily">Daily</option>
             </select>
 
-            <textarea name="" id="description" required placeholder="Task Description"></textarea>
+            <textarea name="description" id="description" required placeholder="Task Description"></textarea>
 
             <button type="submit">Add Task</button>
 
         </form>
+
+        <div class="Task-List">
+            
+            <div id="TaskItem">
+
+                </div>
+
+            </div>
+        </div>
     </main>
 
-    <footer></footer>
-</body>
+    <!-- <footer>
+        <p>&copy; 2025 ToDo App</p>
+    </footer> -->
 
+    <script src="scripts.js"></script>
+</body>
 </html>
