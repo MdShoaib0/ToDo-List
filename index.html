@@ -20,9 +20,12 @@
     </header>
 
     <main>
+
+        <p class="quote">Create your task here..</p>
+
         <form onsubmit="CreateTask(event)">
 
-            <input id="INPUT" type="text" required placeholder="Task Title">
+            <input id="INPUT" type="text" placeholder="Task Title">
 
             <select name="" id="Categories">
                 <option value="">Categories</option>
@@ -32,26 +35,35 @@
                 <option value="Daily">Daily</option>
             </select>
 
-            <textarea name="description" id="description" required placeholder="Task Description"></textarea>
+            <textarea name="description" id="description" placeholder="Task Description"></textarea>
 
             <button type="submit">Add Task</button>
 
         </form>
 
+
+        <nav>
+            <a href="Namaz.html" target="_self">Namaz</a>
+            <a href="#">Daily Routing</a>
+        </nav>
+
         <div class="Task-List">
-            
+
             <div id="TaskItem">
 
-                </div>
-
             </div>
+
         </div>
+        </div>
+
+
     </main>
 
     <!-- <footer>
         <p>&copy; 2025 ToDo App</p>
     </footer> -->
 
-    <script src="scripts.js"></script>
+    <script src="script1.js"></script>
 </body>
+
 </html>
