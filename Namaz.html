@@ -1,85 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Namaz</title>
     <link rel="stylesheet" href="Namaz.css" />
 </head>
+
 <body>
     <p class="title">Remaining Namaz count</p>
+
     <div class="container">
-        <div class="box" onclick="Increment('Fazar')">
-            <p>Fazar</p>
-            <div class="Done">
-                <div class="month">
-                    <p>Months</p>
-                    <p class="zero" id="Month-Fazar">0</p>
+
+        <!-- 🔵 Fazar -->
+        <div id="Fazar" class="box" onclick="Increment('Fazar')">
+            <p class="name">Fazar</p>
+
+            <div class="track">
+                <div class="remain">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Remain-Year-Fazar">10</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Remain-Month-Fazar">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Remain-Day-Fazar">0</p>
+                    </div>
                 </div>
-                <div class="day">
-                    <p>Days</p>
-                    <p class="zero" id="Day-Fazar">0</p>
+
+                <div class="Done">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Year-Fazar">0</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Month-Fazar">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Day-Fazar">0</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="box" onclick="Increment('Duhar')">
-            <p>Duhar</p>
-            <div class="Done">
-                <div class="month">
-                    <p>Months</p>
-                    <p class="zero" id="Month-Duhar">0</p>
+        <!-- 🟢 Duhar -->
+        <div id="Duhar" class="box" onclick="Increment('Duhar')">
+            <p class="name">Duhar</p>
+
+            <div class="track">
+                <div class="remain">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Remain-Year-Duhar">10</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Remain-Month-Duhar">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Remain-Day-Duhar">0</p>
+                    </div>
                 </div>
-                <div class="day">
-                    <p>Days</p>
-                    <p class="zero" id="Day-Duhar">0</p>
+
+                <div class="Done">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Year-Duhar">0</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Month-Duhar">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Day-Duhar">0</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="box" onclick="Increment('Ashar')">
-            <p>Ashar</p>
-            <div class="Done">
-                <div class="month">
-                    <p>Months</p>
-                    <p class="zero" id="Month-Ashar">0</p>
+        <!-- 🟠 Ashar -->
+        <div id="Ashar" class="box" onclick="Increment('Ashar')">
+            <p class="name">Ashar</p>
+
+            <div class="track">
+                <div class="remain">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Remain-Year-Ashar">10</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Remain-Month-Ashar">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Remain-Day-Ashar">0</p>
+                    </div>
                 </div>
-                <div class="day">
-                    <p>Days</p>
-                    <p class="zero" id="Day-Ashar">0</p>
+
+                <div class="Done">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Year-Ashar">0</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Month-Ashar">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Day-Ashar">0</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="box" onclick="Increment('Magrib')">
-            <p>Magrib</p>
-            <div class="Done">
-                <div class="month">
-                    <p>Months</p>
-                    <p class="zero" id="Month-Magrib">0</p>
+        <!-- 🟣 Magrib -->
+        <div id="Magrib" class="box" onclick="Increment('Magrib')">
+            <p class="name">Magrib</p>
+
+            <div class="track">
+                <div class="remain">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Remain-Year-Magrib">10</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Remain-Month-Magrib">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Remain-Day-Magrib">0</p>
+                    </div>
                 </div>
-                <div class="day">
-                    <p>Days</p>
-                    <p class="zero" id="Day-Magrib">0</p>
+
+                <div class="Done">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Year-Magrib">0</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Month-Magrib">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Day-Magrib">0</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="box" onclick="Increment('Esha')">
-            <p>Esha</p>
-            <div class="Done">
-                <div class="month">
-                    <p>Months</p>
-                    <p class="zero" id="Month-Esha">0</p>
+        <!-- 🔴 Esha -->
+        <div id="Esha" class="box" onclick="Increment('Esha')">
+            <p class="name">Esha</p>
+
+            <div class="track">
+                <div class="remain">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Remain-Year-Esha">10</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Remain-Month-Esha">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Remain-Day-Esha">0</p>
+                    </div>
                 </div>
-                <div class="day">
-                    <p>Days</p>
-                    <p class="zero" id="Day-Esha">0</p>
+
+                <div class="Done">
+                    <div class="year">
+                        <p>Years</p>
+                        <p class="zero" id="Year-Esha">0</p>
+                    </div>
+                    <div class="month">
+                        <p>Months</p>
+                        <p class="zero" id="Month-Esha">0</p>
+                    </div>
+                    <div class="day">
+                        <p>Days</p>
+                        <p class="zero" id="Day-Esha">0</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <footer>
+        <p>&copy; 2025 ToDo App</p>
+    </footer>
     <script src="Namaz.js"></script>
 </body>
+
 </html>

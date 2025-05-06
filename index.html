@@ -25,9 +25,9 @@
 
         <form onsubmit="CreateTask(event)">
 
-            <input id="INPUT" type="text" placeholder="Task Title">
+            <input class="input" id="INPUT" type="text" placeholder="Task Title">
 
-            <select name="" id="Categories">
+            <select class="input" name="" id="Categories">
                 <option value="">Categories</option>
                 <option value="All">All</option>
                 <option value="Normal">Normal</option>
@@ -35,16 +35,22 @@
                 <option value="Daily">Daily</option>
             </select>
 
-            <textarea name="description" id="description" placeholder="Task Description"></textarea>
+            <textarea class="input" name="description" id="description" placeholder="Task Description"></textarea>
 
-            <button type="submit">Add Task</button>
+            <button class="btn" type="submit">Add Task</button>
 
         </form>
 
+        <section>
+            <div id="All" class="cat">All</div>
+            <div id="Normal" class="cat">Normal</div>
+            <div id="Must" class="cat">Must</div>
+            <div id="Daily" class="cat">Daily</div>
+        </section>
 
         <nav>
-            <a href="Namaz.html" target="_self">Namaz</a>
-            <a href="#">Daily Routing</a>
+            <a class="Namaz" href="Namaz.html" target="_self">Namaz</a>
+            <a class="Routing" href="#">Daily Routing</a>
         </nav>
 
         <div class="Task-List">
@@ -59,10 +65,11 @@
 
     </main>
 
-    <!-- <footer>
+    <footer>
         <p>&copy; 2025 ToDo App</p>
-    </footer> -->
-
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="script1.js"></script>
 </body>
 

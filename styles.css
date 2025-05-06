@@ -1,5 +1,5 @@
 /* ============================= */
-/*        Global Styles          */
+/*          Global Styles        */
 /* ============================= */
 * {
     margin: 0;
@@ -9,7 +9,7 @@
 }
 
 /* ============================= */
-/*          Body Styling         */
+/*            Body               */
 /* ============================= */
 body {
     width: 100vw;
@@ -18,26 +18,29 @@ body {
 }
 
 /* ============================= */
-/*          Header Styling       */
+/*            Header             */
 /* ============================= */
 header {
     width: 100%;
     height: auto;
-    /* background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%); */
 }
 
-header>h1 {
+header > h1 {
     color: rgb(243, 243, 243);
     text-align: center;
     font-size: 2rem;
     padding: 1.5rem 0;
 }
 
+/* ============================= */
+/*            Navigation         */
+/* ============================= */
 nav {
     width: 85%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1rem;
+    margin: 1.2rem 0;
 }
 
 nav > a {
@@ -47,23 +50,72 @@ nav > a {
     text-align: center;
     padding: 1rem 0;
     border: none;
-    border-radius: 9px;
+    border-radius: 15px;
     color: white;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.Namaz {
+    background-color: rgb(130, 0, 106);
+}
+
+.Routing {
+    background-color: rgb(0, 198, 122);
+    color: black;
 }
 
 /* ============================= */
-/*           Main Section        */
+/*          Categories           */
+/* ============================= */
+section {
+    width: 85%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#All {
+    background-color: rgb(0, 149, 149);
+}
+
+#Normal {
+    background-color: rgb(141, 15, 36);
+}
+
+#Must {
+    background-color: rgb(83, 0, 128);
+}
+
+#Daily {
+    background-color: orangered;
+}
+
+section > .cat {
+    text-align: center;
+    background-color: blueviolet;
+    padding: 1rem 0;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* ============================= */
+/*          Main Section         */
 /* ============================= */
 main {
     width: 100%;
     height: auto;
-    padding-top: 3rem;
+    padding-top: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 3rem;
+    gap: 1.3rem;
 }
 
 .quote {
@@ -71,11 +123,11 @@ main {
     color: rgb(255, 166, 0);
     font-weight: 500;
     align-self: self-start;
-    margin-left: 7.5rem;
+    margin-left: 7.5%;
 }
 
 /* ============================= */
-/*         Form Styling          */
+/*         Form Section          */
 /* ============================= */
 form {
     width: 100%;
@@ -83,78 +135,77 @@ form {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.1rem;
+    margin-bottom: 1rem;
 }
 
-form>input {
+form > input,
+form > select,
+form > textarea,
+form > button {
     width: 85%;
-    height: 3.5rem;
-    padding: 0 1.5rem;
-    border: none;
-    outline: none;
-    border-radius: 9px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     font-size: 1rem;
-}
-
-form>select {
-    width: 85%;
-    height: 3.5rem;
-    padding: 0 1.5rem;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     border: none;
     outline: none;
+}
+
+form > input {
+    height: 3.5rem;
+    padding: 0 1.5rem;
     border-radius: 9px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+form > select {
+    height: 3.5rem;
+    padding: 0 1.5rem;
+    border-radius: 9px;
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 15px;
-    font-size: 1rem;
 }
 
-form>textarea {
-    width: 85%;
+form > textarea {
     height: 8rem;
     padding: 1rem 1.5rem;
-    border: none;
-    outline: none;
     border-radius: 12px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    font-size: 1rem;
 }
 
-form>button {
-    width: 85%;
+form > button {
     height: 3.3rem;
-    margin-top: 0.5rem;
+    margin: 1.3rem 0;
     background-color: red;
-    color: silver;
-    border: none;
-    border-radius: 9px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    font-size: 1rem;
+    color: white;
+    border-radius: 13px;
     font-weight: 600;
 }
 
 /* ============================= */
-/*      Task List Styling        */
+/*         Task Section          */
 /* ============================= */
 .TaskCard {
     position: relative;
     width: 100%;
-    background: linear-gradient(to bottom, rgb(191, 245, 227), rgb(4, 240, 161));
-    border-radius: 14px;
+    background: linear-gradient(to right, rgb(174, 235, 215), rgb(0, 218, 145));
+    border-radius: 15px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 1rem 1rem;
+    padding: 1rem 1.3rem;
+}
+
+#TaskItem {
+    width: 85%;
+    display: grid;
+    gap: 2rem;
+    padding-bottom: 3rem;
+    grid-template-columns: repeat(1fr);
 }
 
 .BtnCard {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -169,40 +220,30 @@ form>button {
     gap: 3rem;
 }
 
-#TaskItem {
-    width: 85%;
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(1fr);  
-}
-
 /* ============================= */
-/*       Button Styling          */
+/*           Buttons             */
 /* ============================= */
-.deletebtn {
-    border: none;
-    outline: none;
-    padding: 0.4rem 0.7rem;
-    color: white;
-    background-color: rgb(255, 0, 0);
-    border-radius: 10px;
-    font-size: 0.7rem;
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
-}
-
+.deletebtn,
 .completebtn {
     border: none;
     outline: none;
     padding: 0.4rem 0.7rem;
     color: white;
-    background-color: rgb(3, 132, 76);
     border-radius: 10px;
-    font-size: 0.7rem;
+    font-size: 0.85~rem;
     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
 }
 
+.deletebtn {
+    background-color: rgb(255, 0, 0);
+}
+
+.completebtn {
+    background-color: rgb(3, 132, 76);
+}
+
 /* ============================= */
-/*         Label Styling         */
+/*            Labels             */
 /* ============================= */
 .list2 {
     padding: 4px 15px;
@@ -216,19 +257,48 @@ form>button {
 }
 
 /* ============================= */
-/*        Media Queries          */
+/*            Footer             */
+/* ============================= */
+footer > p {
+    text-align: center;
+    color: white;
+    padding-bottom: 1rem;
+}
+
+/* ============================= */
+/*         Media Queries         */
 /* ============================= */
 
-/* ------ Tablets ------ */
+/* Tablets */
 @media screen and (min-width: 440px) {
     #TaskItem {
-        grid-template-columns: repeat(2, 1fr);  
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* ------ Large Screens ------ */
+/* Large Screens */
 @media screen and (min-width: 769px) {
     #TaskItem {
-        grid-template-columns: repeat(4, 1fr);  
+        grid-template-columns: repeat(4, 1fr);
     }
+    section {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    form {
+        width: 85%;
+        align-items: flex-start;
+    }
+    
+    form > input,
+    form > select,
+    form > textarea,
+    form > button {
+        width: 40%;
+    }
+    
+    form > button {
+        width: 20%;
+    }
+    
 }

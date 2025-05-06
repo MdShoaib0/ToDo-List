@@ -1,20 +1,54 @@
-const counts = {
-    Fazar: { day: 0, month: 0 },
-    Duhar: { day: 0, month: 0 },
-    Ashar: { day: 0, month: 0 },
-    Magrib: { day: 0, month: 0 },
-    Esha: { day: 0, month: 0 }
-};
-
-function Increment(prayerName) {
-    const current = counts[prayerName];
-    current.day += 1;
-
-    if (current.day === 30) {
-        current.month += 1;
-        current.day = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize or load data from localStorage
+    if (!localStorage.getItem('namazData')) {
+        const defaultData = {
+            Fazar: { remainingDays: 3600, doneDays: 0 },
+            Duhar: { remainingDays: 3600, doneDays: 0 },
+            Ashar: { remainingDays: 3600, doneDays: 0 },
+            Magrib: { remainingDays: 3600, doneDays: 0 },
+            Esha: { remainingDays: 3600, doneDays: 0 }
+        };
+        localStorage.setItem('namazData', JSON.stringify(defaultData));
     }
+    updateAllDisplays();
+});
 
-    document.getElementById(`Day-${prayerName}`).innerText = current.day;
-    document.getElementById(`Month-${prayerName}`).innerText = current.month;
+function convertDaysToYMD(days) {
+    const years = Math.floor(days / 360);
+    const remainingDaysAfterYears = days % 360;
+    const months = Math.floor(remainingDaysAfterYears / 30);
+    const day = remainingDaysAfterYears % 30;
+    return { years, months, days: day };
+}
+
+function updateDisplay(namaz) {
+    const data = JSON.parse(localStorage.getItem('namazData'));
+    const remaining = convertDaysToYMD(data[namaz].remainingDays);
+    const done = convertDaysToYMD(data[namaz].doneDays);
+
+    // Update remaining elements
+    document.getElementById(`Remain-Year-${namaz}`).textContent = remaining.years;
+    document.getElementById(`Remain-Month-${namaz}`).textContent = remaining.months;
+    document.getElementById(`Remain-Day-${namaz}`).textContent = remaining.days;
+
+    // Update done elements
+    document.getElementById(`Year-${namaz}`).textContent = done.years;
+    document.getElementById(`Month-${namaz}`).textContent = done.months;
+    document.getElementById(`Day-${namaz}`).textContent = done.days;
+}
+
+function updateAllDisplays() {
+    const namazList = ['Fazar', 'Duhar', 'Ashar', 'Magrib', 'Esha'];
+    namazList.forEach(namaz => updateDisplay(namaz));
+}
+
+function Increment(namaz) {
+    const data = JSON.parse(localStorage.getItem('namazData'));
+    if (data[namaz].remainingDays <= 0) return;
+
+    data[namaz].remainingDays--;
+    data[namaz].doneDays++;
+    
+    localStorage.setItem('namazData', JSON.stringify(data));
+    updateDisplay(namaz);
 }
