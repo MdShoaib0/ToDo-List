@@ -159,31 +159,30 @@ gsap.from(".input", {
 });
 
 // Quote element animation
-gsap.from(".quote", {
+gsap.to(".quote", {
     x: 100,
     duration: 1,
     scrollTrigger: {
         trigger: ".quote",   // Trigger on elements with the class "quote"
         scroller: "body",    // Scrolling the whole page
         // markers: true,       // Show markers for debugging
-        start: "top 80%",    // Start the animation when the top of the element hits 80% of the viewport
-        end: "bottom top",   // End when the bottom of the element hits the top of the viewport
+        start: "top 10%",    // Start the animation when the top of the element hits 80% of the viewport
+        end: "bottom 5%",   // End when the bottom of the element hits the top of the viewport
         scrub: 2             // Smooth scroll animation
     }
 });
 
 // H1 element animation (fading in from above)
-gsap.from("h1", {
+gsap.to("h1", {
     y: -35,
     duration: 1,
-    opacity: 0,
     scrollTrigger: {
         trigger: "h1",      // Trigger on the h1 element
         scroller: "body",   // Scrolling the whole page
         // markers: true,      // Show markers for debugging
-        start: "top 80%",   // Start the animation when the top of the element hits 80% of the viewport
-        end: "bottom top",  // End when the bottom of the element hits the top of the viewport
-        scrub: 2            // Smooth scroll animation
+        start: "top top",   // Start the animation when the top of the element hits 80% of the viewport
+        end: "bottom 10%",  // End when the bottom of the element hits the top of the viewport
+        scrub: 2           // Smooth scroll animation
     }
 });
 
@@ -195,15 +194,15 @@ gsap.from(".cat", {
         trigger: ".cat",    // Trigger on elements with the class "cat"
         scroller: "body",   // Scrolling the whole page
         // markers: true,      // Show markers for debugging
-        start: "top 80%",   // Start the animation when the top of the element hits 80% of the viewport
-        end: "bottom top",  // End when the bottom of the element hits the top of the viewport
+        start: "top 70%",   // Start the animation when the top of the element hits 80% of the viewport
+        end: "bottom 30%",  // End when the bottom of the element hits the top of the viewport
         scrub: 2            // Smooth scroll animation
     }
 });
 
 // Anchor (link) animation
 gsap.from("a", {
-    y: -35,
+    y: 35,
     duration: 1,
     scrollTrigger: {
         trigger: "a",       // Trigger on all anchor tags
@@ -216,15 +215,15 @@ gsap.from("a", {
 });
 
 // Task Item animation
-gsap.from("#TaskItem", {
+gsap.to("#TaskItem", {
     y: 35,
     duration: 1,
     scrollTrigger: {
         trigger: "#TaskItem",   // Trigger on element with the ID "TaskItem"
         scroller: "body",       // Scrolling the whole page
         // markers: true,          // Show markers for debugging
-        start: "top 80%",       // Start the animation when the top of the element hits 80% of the viewport
-        end: "bottom top",      // End when the bottom of the element hits the top of the viewport
+        start: "top 100%",       // Start the animation when the top of the element hits 80% of the viewport
+        end: "bottom 80%",      // End when the bottom of the element hits the top of the viewport
         scrub: 2                // Smooth scroll animation
     }
 });

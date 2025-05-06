@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: linear-gradient(to right, #c1e0d9 0%, rgb(94, 210, 193) 100%);
+    background-image: linear-gradient(to right, #ffffff 0%, rgb(205, 214, 210) 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -45,7 +45,7 @@ body {
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    background: #daabe2;
+    background-image: linear-gradient(to right, rgb(169, 218, 237) 0%, rgb(75, 176, 216) 100%);
     border-radius: 20px;
     padding-bottom: 1.5rem;
     box-shadow:
