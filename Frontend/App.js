@@ -4,131 +4,107 @@ const textArea = document.getElementById("description");
 const item = document.getElementById("TaskItem");
 const Categories = document.getElementById("Categories");
 const categoryFilters = document.querySelectorAll(".cat");
+const submitBtn = document.querySelector(".btn");
 
 // -------------------- Global Variables --------------------
 let taskList = []; // Array to store all tasks
 
-// -------------------- Load Tasks from localStorage --------------------
-document.addEventListener("DOMContentLoaded", function () {
-    // Load tasks from localStorage
-    const storedTasks = localStorage.getItem("taskList");
-    if (storedTasks) {
-        taskList = JSON.parse(storedTasks);
-        renderAllTasks();
-    }
+// -------------------- Load Tasks from Backend --------------------
+document.addEventListener("DOMContentLoaded", async function () {
+    await fetchTasksFromBackend(); // Get data from backend
+    renderAllTasks();
 
-    // GSAP animations...
     gsap.registerPlugin(ScrollTrigger);
+    let tl = gsap.timeline();
 
-    // Create a Timeline for smoother animation
-    const tl = gsap.timeline({
-        defaults: {
-            duration: 1,
-            ease: "power1.out",  // Added ease for smoothness
-        }
+    tl.from(".heading", {
+        y: -50,
+        duration: 0.6,
+        opacity: 0,
+        ease: "power3.out",
     });
 
-    // Animate ".input"
-    gsap.utils.toArray(".input").forEach(el => {
-        tl.from(el, {
-            y: 50,
-            scrollTrigger: {
-                trigger: el,
-                start: "top 40%",
-                end: "bottom top",
-                scrub: 1,
-                toggleActions: "play reverse play reverse", // Enable reverse and forward toggle
-            }
-        });
+    tl.from(".quote", {
+        x: 250,
+        duration: 0.8,
+        opacity: 0,
+        ease: "back.out(1.7)",
     });
 
-    // Animate ".quote"
-    gsap.utils.toArray(".quote").forEach(el => {
-        tl.to(el, {
-            x: 70,
-            scrollTrigger: {
-                trigger: el,
-                start: "top 10%",
-                end: "bottom 5%",
-                scrub: 1,
-                toggleActions: "play reverse play reverse",
-            }
-        });
-    });
-
-    // Animate "h1"
-    gsap.utils.toArray("h1").forEach(el => {
-        tl.to(el, {
-            y: -35,
-            scrollTrigger: {
-                trigger: el,
-                start: "top top",
-                end: "bottom 10%",
-                scrub: 1,
-                toggleActions: "play reverse play reverse",
-            }
-        });
-    });
-
-    // Animate ".cat"
-    gsap.utils.toArray(".cat").forEach(el => {
-        tl.from(el, {
-            y: 50,
-            scrollTrigger: {
-                trigger: el,
-                start: "top 70%",
-                end: "bottom 30%",
-                scrub: 1,
-                toggleActions: "play reverse play reverse",
-            }
-        });
-    });
-
-    // Animate "a"
-    gsap.utils.toArray("a").forEach(el => {
-        tl.from(el, {
-            y: 50,
-            scrollTrigger: {
-                trigger: el,
-                start: "top 80%",
-                end: "bottom top",
-                scrub: 1,
-                toggleActions: "play reverse play reverse",
-            }
-        });
-    });
-
-    // Animate "#TaskItem"
-    gsap.from("#TaskItem", {
+    tl.from(".input", {
         y: 50,
-        duration: 1,
+        opacity: 0,
         stagger: 0.2,
-        scrollTrigger: {
-            trigger: "#TaskItem",
-            start: "top 100%",
-            end: "bottom 80%",
-            scrub: 1,
-            toggleActions: "play reverse play reverse", // Forward and reverse toggle
-        }
+        duration: 0.8,
+        ease: "power3.out",
     });
 
-    // Animate ".btn"
-    gsap.utils.toArray(".btn").forEach(el => {
-        tl.from(el, {
-            y: 50,
-            scrollTrigger: {
-                trigger: el,
-                start: "top 60%",
-                end: "bottom 30%",
-                scrub: 1,
-                toggleActions: "play reverse play reverse", // Forward and reverse toggle
-            }
-        });
+    tl.add("cat");
+
+    tl.from(".left", {
+        x: -100,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.3,
+        ease: "power3.out"
+    }, "cat");
+
+    tl.from(".right", {
+        x: 100,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.3,
+        ease: "power3.out"
+    }, "cat");
+
+    let tl2 = gsap.timeline({
+        delay: 3.7
     });
+
+    tl2.from("#TaskItem", {
+        y: 35,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out"
+    })
+
+    tl2.from(".TitleTask", {
+        y: 30,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 0.7,
+        ease: "power3.out"
+    }, "-=0.7")
 });
 
+// -------------------- Fetch Tasks from Backend --------------------
+async function fetchTasksFromBackend() {
+    try {
+        const response = await fetch("http://localhost:5000/tasks");
+        if (!response.ok) throw new Error("Failed to fetch tasks");
+        taskList = await response.json();
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+    }
+}
 
-// -------------------- Render All Tasks with Dynamic Index --------------------
+// -------------------- Send Task to Backend --------------------
+async function sendTaskToBackend(task) {
+    try {
+        const response = await fetch("http://localhost:5000/tasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(task)
+        });
+        if (!response.ok) throw new Error("Failed to save task");
+    } catch (error) {
+        console.error("Error sending task:", error);
+    }
+}
+
+// -------------------- Render All Tasks --------------------
 function renderAllTasks() {
     item.innerHTML = ""; // Clear the task container
     taskList.forEach((task, index) => {
@@ -137,8 +113,9 @@ function renderAllTasks() {
 }
 
 // -------------------- Create Task Handler --------------------
-function CreateTask(event) {
+async function CreateTask(event) {
     event.preventDefault();
+    submitBtn.textContent = "Add Task";
 
     const Title = inputField.value.trim();
     const descriptions = textArea.value.trim();
@@ -150,7 +127,7 @@ function CreateTask(event) {
     }
 
     const newTask = {
-        id: Date.now(), // Unique identifier
+        id: Date.now(),
         title: Title,
         description: descriptions,
         category: Categorie,
@@ -158,10 +135,9 @@ function CreateTask(event) {
     };
 
     taskList.push(newTask);
-    localStorage.setItem("taskList", JSON.stringify(taskList)); // Save to localStorage
-    renderAllTasks(); // Re-render all to update numbering
+    await sendTaskToBackend(newTask); // Send to backend
+    renderAllTasks();
 
-    // Clear the form fields
     inputField.value = "";
     textArea.value = "";
     Categories.value = "";
@@ -180,40 +156,49 @@ function renderTask(task, index) {
     titleEl.style.fontWeight = "700";
 
     const categoryEl = document.createElement("p");
-    categoryEl.className = "list2";
+    categoryEl.className = "list2 TitleTask";
     categoryEl.textContent = task.category;
 
     const descEl = document.createElement("p");
-    descEl.className = "list3";
+    descEl.className = "list3 TitleTask";
     descEl.textContent = task.description;
-    descEl.style.paddingTop = "1.4rem";
+    descEl.style.paddingTop = "2.2rem";
     descEl.style.fontSize = "0.9rem";
-    descEl.style.opacity = "0.8";
 
     const buttonContainer = document.createElement("div");
     buttonContainer.className = "BtnCard";
 
     const deleteBtn = document.createElement("button");
-    deleteBtn.className = "deletebtn";
+    deleteBtn.className = "deletebtn TitleTask";
     deleteBtn.textContent = "Delete";
-    deleteBtn.onclick = function () {
+    deleteBtn.onclick = async function () {
         taskList = taskList.filter(t => t.id !== task.id);
-        localStorage.setItem("taskList", JSON.stringify(taskList)); // Save to localStorage
+        await deleteTaskFromBackend(task.id);
         renderAllTasks();
     };
 
     const completeBtn = document.createElement("button");
-    completeBtn.className = "completebtn";
+    completeBtn.className = "completebtn TitleTask";
     completeBtn.textContent = "Complete";
     completeBtn.onclick = function () {
         task.completed = true;
-        localStorage.setItem("taskList", JSON.stringify(taskList)); // Save to localStorage
         taskCard.style.opacity = "0.6";
         titleEl.style.textDecoration = "line-through";
     };
 
-    buttonContainer.appendChild(deleteBtn);
+    const editBtn = document.createElement("button");
+    editBtn.className = "editbtn TitleTask";
+    editBtn.textContent = "Edit";
+    editBtn.onclick = function () {
+        inputField.value = task.title;
+        Categories.value = task.category;
+        textArea.value = task.description;
+        submitBtn.textContent = "Update Task";
+    };
+
     buttonContainer.appendChild(completeBtn);
+    buttonContainer.appendChild(editBtn);
+    buttonContainer.appendChild(deleteBtn);
 
     taskCard.appendChild(titleEl);
     taskCard.appendChild(categoryEl);
@@ -221,6 +206,18 @@ function renderTask(task, index) {
     taskCard.appendChild(buttonContainer);
 
     item.appendChild(taskCard);
+}
+
+// -------------------- Delete Task from Backend --------------------
+async function deleteTaskFromBackend(id) {
+    try {
+        const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+            method: "DELETE"
+        });
+        if (!response.ok) throw new Error("Failed to delete task");
+    } catch (error) {
+        console.error("Error deleting task:", error);
+    }
 }
 
 // -------------------- Category Filter Logic --------------------
