@@ -162,7 +162,7 @@ function renderTask(task, index) {
     const descEl = document.createElement("p");
     descEl.className = "list3 TitleTask";
     descEl.textContent = task.description;
-    descEl.style.paddingTop = "2.2rem";
+    descEl.style.paddingTop = "2.5rem";
     descEl.style.fontSize = "0.9rem";
 
     const buttonContainer = document.createElement("div");

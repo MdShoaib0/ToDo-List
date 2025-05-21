@@ -19,7 +19,7 @@ body::-webkit-scrollbar {
 body {
     width: 100vw;
     height: auto;
-    background-color: rgb(167 243 208);
+    background-color: rgb(181, 250, 218);
     /* background-color: black; */
 }
 
@@ -50,7 +50,7 @@ nav {
 
 
 .Namaz {
-    background-color: rgb(255, 234, 0);
+    background-color: rgb(255, 162, 0);
 }
 
 .Routing {
@@ -76,6 +76,8 @@ section {
     color: white;
     font-weight: 500;
     font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 #All {
@@ -83,7 +85,7 @@ section {
 }
 
 #Normal {
-    background-color: rgb(255, 0, 238);
+    background-color: rgb(255, 0, 187);
 }
 
 #Must {
@@ -136,7 +138,7 @@ form > textarea,
 form > button {
     width: 85%;
     font-size: 1rem;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
     border: none;
     outline: none;
 }
@@ -171,6 +173,7 @@ form > button {
     color: white;
     border-radius: 13px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 /* ============================= */
@@ -179,7 +182,7 @@ form > button {
 .TaskCard {
     position: relative;
     width: 100%;
-    background-image: linear-gradient(to bottom, rgb(255, 187, 252) 0%, rgb(255, 49, 149) 100%);
+    background-image: linear-gradient(to bottom, rgb(255, 210, 253) 0%, rgb(255, 0, 247) 100%);
     border-radius: 18px;
     box-shadow:
         20px 20px 60px rgba(0, 0, 0, 0.1),
@@ -221,11 +224,12 @@ form > button {
 .completebtn, .editbtn {
     border: none;
     outline: none;
-    padding: 0.35rem 0.65rem;
+    padding: 0.4rem 0.65rem;
     border-radius: 11px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 400;
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .deletebtn {
@@ -254,7 +258,8 @@ form > button {
     border-radius: 50px;
     background-color: rgb(255, 0, 247);
     font-size: 0.8rem;
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 /* ============================= */
