@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 // -------------------- Fetch Tasks from Backend --------------------
 async function fetchTasksFromBackend() {
     try {
-        const response = await fetch("http://localhost:5000/tasks");
+        const response = await fetch("https://todo-list-backend-n5kz.onrender.com/tasks");
         if (!response.ok) throw new Error("Failed to fetch tasks");
         taskList = await response.json();
     } catch (error) {
@@ -91,7 +91,7 @@ async function fetchTasksFromBackend() {
 // -------------------- Send Task to Backend --------------------
 async function sendTaskToBackend(task) {
     try {
-        const response = await fetch("http://localhost:5000/tasks", {
+        const response = await fetch("https://todo-list-backend-n5kz.onrender.com/tasks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -211,7 +211,7 @@ function renderTask(task, index) {
 // -------------------- Delete Task from Backend --------------------
 async function deleteTaskFromBackend(id) {
     try {
-        const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+        const response = await fetch(`https://todo-list-backend-n5kz.onrender.com/tasks/${id}`, {
             method: "DELETE"
         });
         if (!response.ok) throw new Error("Failed to delete task");
