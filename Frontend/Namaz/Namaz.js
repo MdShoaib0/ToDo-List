@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5000/prayers";
+const baseUrl = "https://todo-list-backend-n5kz.onrender.com/prayers";
 let prayers = {};
 
 // Convert total days to years, months, days
