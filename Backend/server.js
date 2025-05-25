@@ -52,10 +52,31 @@ app.post('/tasks', async (req, res) => {
     }
 });
 
+//Update a task by ID
+
+app.put('/tasks/:id', async (req, res) => {
+    try {
+        const ID = req.params.id;
+        const newTask = req.body;
+
+        const result = await Task.updateOne({ _id: ID }, { $set: newTask });
+
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ message: "Task not found or no changes made." });
+        }
+
+        res.status(200).json({ message: "✅ Task updated successfully" });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+
 // Delete a task by ID
 app.delete('/tasks/:id', async (req, res) => {
     try {
-        const deleted = await Task.deleteOne({ id: req.params.id });
+        const ID = req.params.id;
+        const deleted = await Task.deleteOne({ id: ID });
         if (deleted.deletedCount === 0) {
             return res.status(404).json({ message: 'Task not found' });
         }
