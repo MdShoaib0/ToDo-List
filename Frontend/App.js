@@ -6,81 +6,86 @@ const Categories = document.getElementById("Categories");
 const categoryFilters = document.querySelectorAll(".cat");
 const submitBtn = document.querySelector(".btn");
 
+
+const URL_ServerSide = "https://todo-list-backend-n5kz.onrender.com/tasks/";
+// const URL_ServerSide = "http://localhost:5000/tasks";
+
 // -------------------- Global Variables --------------------
 let taskList = []; // Array to store all tasks
 
 // -------------------- Load Tasks from Backend --------------------
-document.addEventListener("DOMContentLoaded", async function () {
-    await fetchTasksFromBackend(); // Get data from backend
-    renderAllTasks();
+// document.addEventListener("DOMContentLoaded", async function () {
+// });
 
-    gsap.registerPlugin(ScrollTrigger);
-    let tl = gsap.timeline();
+await fetchTasksFromBackend();
+renderAllTasks();
 
-    tl.from(".heading", {
-        y: -50,
-        duration: 0.6,
-        opacity: 0,
-        ease: "power3.out",
-    });
+gsap.registerPlugin(ScrollTrigger);
+let tl = gsap.timeline();
 
-    tl.from(".quote", {
-        x: 250,
-        duration: 0.8,
-        opacity: 0,
-        ease: "back.out(1.7)",
-    });
-
-    tl.from(".input", {
-        y: 50,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 0.8,
-        ease: "power3.out",
-    });
-
-    tl.add("cat");
-
-    tl.from(".left", {
-        x: -100,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.3,
-        ease: "power3.out"
-    }, "cat");
-
-    tl.from(".right", {
-        x: 100,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.3,
-        ease: "power3.out"
-    }, "cat");
-
-    let tl2 = gsap.timeline({
-        delay: 3.7
-    });
-
-    tl2.from("#TaskItem", {
-        y: 35,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out"
-    })
-
-    tl2.from(".TitleTask", {
-        y: 30,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 0.7,
-        ease: "power3.out"
-    }, "-=0.7")
+tl.from(".heading", {
+    y: -50,
+    duration: 0.6,
+    opacity: 0,
+    ease: "power3.out",
 });
+
+tl.from(".quote", {
+    x: 250,
+    duration: 0.8,
+    opacity: 0,
+    ease: "back.out(1.7)",
+});
+
+tl.from(".input", {
+    y: 50,
+    opacity: 0,
+    stagger: 0.2,
+    duration: 0.8,
+    ease: "power3.out",
+});
+
+tl.add("cat");
+
+tl.from(".left", {
+    x: -100,
+    opacity: 0,
+    duration: 0.7,
+    stagger: 0.3,
+    ease: "power3.out"
+}, "cat");
+
+tl.from(".right", {
+    x: 100,
+    opacity: 0,
+    duration: 0.7,
+    stagger: 0.3,
+    ease: "power3.out"
+}, "cat");
+
+let tl2 = gsap.timeline({
+    delay: 3.7
+});
+
+tl2.from("#TaskItem", {
+    y: 35,
+    opacity: 0,
+    duration: 0.7,
+    ease: "power3.out"
+})
+
+tl2.from(".TitleTask", {
+    y: 30,
+    opacity: 0,
+    stagger: 0.2,
+    duration: 0.7,
+    ease: "power3.out"
+}, "-=0.7")
 
 // -------------------- Fetch Tasks from Backend --------------------
 async function fetchTasksFromBackend() {
     try {
-        const response = await fetch("https://todo-list-backend-n5kz.onrender.com/tasks");
+        const response = await fetch(URL_ServerSide);
         if (!response.ok) throw new Error("Failed to fetch tasks");
         taskList = await response.json();
     } catch (error) {
@@ -91,7 +96,7 @@ async function fetchTasksFromBackend() {
 // -------------------- Send Task to Backend --------------------
 async function sendTaskToBackend(task) {
     try {
-        const response = await fetch("https://todo-list-backend-n5kz.onrender.com/tasks", {
+        const response = await fetch(URL_ServerSide, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -99,6 +104,26 @@ async function sendTaskToBackend(task) {
             body: JSON.stringify(task)
         });
         if (!response.ok) throw new Error("Failed to save task");
+    } catch (error) {
+        console.error("Error sending task:", error);
+    }
+}
+
+// -------------------- Update Task to Backend --------------------
+async function updateTaskInBackend(task, id) {
+    try {
+        const response = await fetch(`${URL_ServerSide}${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+        if(response.ok) {
+            alert("Task Updated Successfully !")
+        }else {
+            throw new error("Faild to Update Task")
+        }
     } catch (error) {
         console.error("Error sending task:", error);
     }
@@ -135,7 +160,11 @@ async function CreateTask(event) {
     };
 
     taskList.push(newTask);
-    await sendTaskToBackend(newTask); // Send to backend
+    if(submitBtn.textContent === "Update Task") {
+        await updateTaskInBackend(newTask, newTask.id)
+    }else {
+        await sendTaskToBackend(newTask);
+    }
     renderAllTasks();
 
     inputField.value = "";
@@ -162,7 +191,7 @@ function renderTask(task, index) {
     const descEl = document.createElement("p");
     descEl.className = "list3 TitleTask";
     descEl.textContent = task.description;
-    descEl.style.paddingTop = "2.5rem";
+    descEl.style.paddingTop = "3rem";
     descEl.style.fontSize = "0.9rem";
 
     const buttonContainer = document.createElement("div");
@@ -211,7 +240,7 @@ function renderTask(task, index) {
 // -------------------- Delete Task from Backend --------------------
 async function deleteTaskFromBackend(id) {
     try {
-        const response = await fetch(`https://todo-list-backend-n5kz.onrender.com/tasks/${id}`, {
+        const response = await fetch(`${URL_ServerSide}${id}`, {
             method: "DELETE"
         });
         if (!response.ok) throw new Error("Failed to delete task");

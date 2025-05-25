@@ -251,13 +251,13 @@ form > button {
 /*            Labels             */
 /* ============================= */
 .list2 {
-    padding: 4px 15px;
-    margin-top: 5px;
+    padding: 5px 17px;
+    margin-top: 7px;
     display: inline-block;
     color: rgb(255, 255, 255);
     border-radius: 50px;
     background-color: rgb(255, 0, 247);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
