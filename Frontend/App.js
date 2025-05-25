@@ -8,7 +8,7 @@ const submitBtn = document.querySelector(".btn");
 const form = document.querySelector("form");
 
 // -------------------- Configuration --------------------
-const URL_ServerSide = "http://localhost:7000/tasks";
+const URL_ServerSide = "https://todo-list-backend-n5kz.onrender.com/tasks";
 
 // -------------------- Global Variables --------------------
 let taskList = [];
