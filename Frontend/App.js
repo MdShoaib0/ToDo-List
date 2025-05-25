@@ -1,87 +1,93 @@
 // -------------------- DOM Elements --------------------
 const inputField = document.getElementById("INPUT");
 const textArea = document.getElementById("description");
-const item = document.getElementById("TaskItem");
-const Categories = document.getElementById("Categories");
+const taskContainer = document.getElementById("TaskItem");
+const categorySelect = document.getElementById("Categories");
 const categoryFilters = document.querySelectorAll(".cat");
 const submitBtn = document.querySelector(".btn");
+const form = document.querySelector("form"); // Assuming you have a form element
 
+// -------------------- Configuration --------------------
+const URL_ServerSide = "http://localhost:7000/tasks";
 
-const URL_ServerSide = "https://todo-list-backend-n5kz.onrender.com/tasks/";
-// const URL_ServerSide = "http://localhost:5000/tasks";
 
 // -------------------- Global Variables --------------------
 let taskList = []; // Array to store all tasks
+let isEditing = false;
+let currentEditId = null;
 
-// -------------------- Load Tasks from Backend --------------------
-document.addEventListener("DOMContentLoaded", async function () {
+// -------------------- Event Listeners --------------------
+document.addEventListener("DOMContentLoaded", initializeApp);
+form.addEventListener("submit", handleTaskSubmission);
+categoryFilters.forEach(button => {
+    button.addEventListener("click", () => filterTasksByCategory(button.id));
+});
+
+// -------------------- Initialization --------------------
+async function initializeApp() {
     await fetchTasksFromBackend();
-renderAllTasks();
+    renderAllTasks();
+    setupAnimations();
+}
 
-gsap.registerPlugin(ScrollTrigger);
-let tl = gsap.timeline();
+// -------------------- Animation Setup --------------------
+function setupAnimations() {
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const tl = gsap.timeline();
+    
+    tl.from(".heading", {
+        y: -50,
+        duration: 0.6,
+        opacity: 0,
+        ease: "power3.out",
+    })
+    .from(".quote", {
+        x: 250,
+        duration: 0.8,
+        opacity: 0,
+        ease: "back.out(1.7)",
+    })
+    .from(".input", {
+        y: 50,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+    })
+    .add("cat")
+    .from(".left", {
+        x: -100,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.3,
+        ease: "power3.out"
+    }, "cat")
+    .from(".right", {
+        x: 100,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.3,
+        ease: "power3.out"
+    }, "cat");
 
-tl.from(".heading", {
-    y: -50,
-    duration: 0.6,
-    opacity: 0,
-    ease: "power3.out",
-});
+    const tl2 = gsap.timeline({ delay: 3.7 });
+    tl2.from("#TaskItem", {
+        y: 35,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out"
+    })
+    .from(".TitleTask", {
+        y: 30,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 0.7,
+        ease: "power3.out"
+    }, "-=0.7");
+}
 
-tl.from(".quote", {
-    x: 250,
-    duration: 0.8,
-    opacity: 0,
-    ease: "back.out(1.7)",
-});
-
-tl.from(".input", {
-    y: 50,
-    opacity: 0,
-    stagger: 0.2,
-    duration: 0.8,
-    ease: "power3.out",
-});
-
-tl.add("cat");
-
-tl.from(".left", {
-    x: -100,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.3,
-    ease: "power3.out"
-}, "cat");
-
-tl.from(".right", {
-    x: 100,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.3,
-    ease: "power3.out"
-}, "cat");
-
-let tl2 = gsap.timeline({
-    delay: 3.7
-});
-
-tl2.from("#TaskItem", {
-    y: 35,
-    opacity: 0,
-    duration: 0.7,
-    ease: "power3.out"
-})
-
-tl2.from(".TitleTask", {
-    y: 30,
-    opacity: 0,
-    stagger: 0.2,
-    duration: 0.7,
-    ease: "power3.out"
-}, "-=0.7")
-});
-
-// -------------------- Fetch Tasks from Backend --------------------
+// -------------------- API Functions --------------------
 async function fetchTasksFromBackend() {
     try {
         const response = await fetch(URL_ServerSide);
@@ -89,10 +95,10 @@ async function fetchTasksFromBackend() {
         taskList = await response.json();
     } catch (error) {
         console.error("Error fetching tasks:", error);
+        showAlert("Failed to load tasks. Please try again later.", "error");
     }
 }
 
-// -------------------- Send Task to Backend --------------------
 async function sendTaskToBackend(task) {
     try {
         const response = await fetch(URL_ServerSide, {
@@ -102,164 +108,198 @@ async function sendTaskToBackend(task) {
             },
             body: JSON.stringify(task)
         });
+        
         if (!response.ok) throw new Error("Failed to save task");
+        return await response.json();
     } catch (error) {
         console.error("Error sending task:", error);
+        showAlert("Failed to save task. Please try again.", "error");
+        throw error;
     }
 }
 
-// -------------------- Update Task to Backend --------------------
 async function updateTaskInBackend(task, id) {
     try {
-        const response = await fetch(`${URL_ServerSide}${id}`, {
+        const response = await fetch(`${URL_ServerSide}/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(task)
         });
-        if(response.ok) {
-            alert("Task Updated Successfully !")
-        }else {
-            throw new error("Faild to Update Task")
-        }
+        
+        if (!response.ok) throw new Error("Failed to update task");
+        return await response.json();
     } catch (error) {
-        console.error("Error sending task:", error);
+        console.error("Error updating task:", error);
+        showAlert("Failed to update task. Please try again.", "error");
+        throw error;
     }
 }
 
-// -------------------- Render All Tasks --------------------
+async function deleteTaskFromBackend(id) {
+    try {
+        const response = await fetch(`${URL_ServerSide}/${id}`, {
+            method: "DELETE"
+        });
+        
+        if (!response.ok) throw new Error("Failed to delete task");
+    } catch (error) {
+        console.error("Error deleting task:", error);
+        showAlert("Failed to delete task. Please try again.", "error");
+        throw error;
+    }
+}
+
+// -------------------- Task Management --------------------
+async function handleTaskSubmission(event) {
+    event.preventDefault();
+    
+    const title = inputField.value.trim();
+    const description = textArea.value.trim();
+    const category = categorySelect.value;
+
+    if (!title || !description || !category) {
+        showAlert("Please fill in all fields", "warning");
+        return;
+    }
+
+    const taskData = {
+        title,
+        description,
+        category,
+        completed: false
+    };
+
+    try {
+        if (isEditing) {
+            taskData.id = currentEditId;
+            const updatedTask = await updateTaskInBackend(taskData, currentEditId);
+            taskList = taskList.map(task => task.id === currentEditId ? updatedTask : task);
+            showAlert("Task updated successfully!", "success");
+        } else {
+            taskData.id = Date.now();
+            const newTask = await sendTaskToBackend(taskData);
+            taskList.push(newTask);
+            showAlert("Task added successfully!", "success");
+        }
+
+        resetForm();
+        renderAllTasks();
+    } catch (error) {
+        // Error handling already done in API functions
+    }
+}
+
+function resetForm() {
+    inputField.value = "";
+    textArea.value = "";
+    categorySelect.value = "";
+    submitBtn.textContent = "Add Task";
+    isEditing = false;
+    currentEditId = null;
+}
+
 function renderAllTasks() {
-    item.innerHTML = ""; // Clear the task container
+    taskContainer.innerHTML = "";
+    
+    if (taskList.length === 0) {
+        taskContainer.innerHTML = '<p class="empty-message">No tasks found. Add a new task!</p>';
+        return;
+    }
+
     taskList.forEach((task, index) => {
         renderTask(task, index);
     });
 }
 
-// -------------------- Create Task Handler --------------------
-async function CreateTask(event) {
-    event.preventDefault();
-    submitBtn.textContent = "Add Task";
-
-    const Title = inputField.value.trim();
-    const descriptions = textArea.value.trim();
-    const Categorie = Categories.value;
-
-    if (!Title || !descriptions || !Categorie) {
-        alert("Please fill in all fields");
-        return;
-    }
-
-    const newTask = {
-        id: Date.now(),
-        title: Title,
-        description: descriptions,
-        category: Categorie,
-        completed: false
-    };
-
-    taskList.push(newTask);
-    if(submitBtn.textContent === "Update Task") {
-        await updateTaskInBackend(newTask, newTask.id)
-    }else {
-        await sendTaskToBackend(newTask);
-    }
-    renderAllTasks();
-
-    inputField.value = "";
-    textArea.value = "";
-    Categories.value = "";
-}
-
-// -------------------- Render Individual Task --------------------
 function renderTask(task, index) {
     const taskCard = document.createElement("div");
     taskCard.className = `TaskCard ${task.category}`;
-    taskCard.setAttribute("data-id", task.id);
+    taskCard.dataset.id = task.id;
+    if (task.completed) {
+        taskCard.classList.add("completed");
+    }
 
-    const titleEl = document.createElement("p");
-    titleEl.className = "TitleTask";
-    titleEl.textContent = `${index + 1}. ${task.title}`;
-    titleEl.style.fontSize = "1.3rem";
-    titleEl.style.fontWeight = "700";
+    taskCard.innerHTML = `
+        <p class="TitleTask" style="font-size: 1.3rem; font-weight: 700;">
+            ${index + 1}. ${task.title}
+        </p>
+        <p class="list2 TitleTask">${task.category}</p>
+        <p class="list3 TitleTask" style="padding-top: 3rem; font-size: 0.9rem;">
+            ${task.description}
+        </p>
+        <div class="BtnCard">
+            <button class="completebtn TitleTask">Complete</button>
+            <button class="editbtn TitleTask">Edit</button>
+            <button class="deletebtn TitleTask">Delete</button>
+        </div>
+    `;
 
-    const categoryEl = document.createElement("p");
-    categoryEl.className = "list2 TitleTask";
-    categoryEl.textContent = task.category;
+    const completeBtn = taskCard.querySelector(".completebtn");
+    const editBtn = taskCard.querySelector(".editbtn");
+    const deleteBtn = taskCard.querySelector(".deletebtn");
 
-    const descEl = document.createElement("p");
-    descEl.className = "list3 TitleTask";
-    descEl.textContent = task.description;
-    descEl.style.paddingTop = "3rem";
-    descEl.style.fontSize = "0.9rem";
+    completeBtn.addEventListener("click", () => toggleTaskCompletion(task.id));
+    editBtn.addEventListener("click", () => prepareTaskEdit(task));
+    deleteBtn.addEventListener("click", () => deleteTask(task.id));
 
-    const buttonContainer = document.createElement("div");
-    buttonContainer.className = "BtnCard";
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "deletebtn TitleTask";
-    deleteBtn.textContent = "Delete";
-    deleteBtn.onclick = async function () {
-        taskList = taskList.filter(t => t.id !== task.id);
-        await deleteTaskFromBackend(task.id);
-        renderAllTasks();
-    };
-
-    const completeBtn = document.createElement("button");
-    completeBtn.className = "completebtn TitleTask";
-    completeBtn.textContent = "Complete";
-    completeBtn.onclick = function () {
-        task.completed = true;
-        taskCard.style.opacity = "0.6";
-        titleEl.style.textDecoration = "line-through";
-    };
-
-    const editBtn = document.createElement("button");
-    editBtn.className = "editbtn TitleTask";
-    editBtn.textContent = "Edit";
-    editBtn.onclick = function () {
-        inputField.value = task.title;
-        Categories.value = task.category;
-        textArea.value = task.description;
-        submitBtn.textContent = "Update Task";
-    };
-
-    buttonContainer.appendChild(completeBtn);
-    buttonContainer.appendChild(editBtn);
-    buttonContainer.appendChild(deleteBtn);
-
-    taskCard.appendChild(titleEl);
-    taskCard.appendChild(categoryEl);
-    taskCard.appendChild(descEl);
-    taskCard.appendChild(buttonContainer);
-
-    item.appendChild(taskCard);
+    taskContainer.appendChild(taskCard);
 }
 
-// -------------------- Delete Task from Backend --------------------
-async function deleteTaskFromBackend(id) {
+async function toggleTaskCompletion(taskId) {
     try {
-        const response = await fetch(`${URL_ServerSide}${id}`, {
-            method: "DELETE"
-        });
-        if (!response.ok) throw new Error("Failed to delete task");
+        const task = taskList.find(t => t.id === taskId);
+        if (!task) return;
+
+        const updatedTask = { ...task, completed: !task.completed };
+        const result = await updateTaskInBackend(updatedTask, taskId);
+        
+        taskList = taskList.map(t => t.id === taskId ? result : t);
+        renderAllTasks();
+    } catch (error) {
+        console.error("Error toggling task completion:", error);
+    }
+}
+
+function prepareTaskEdit(task) {
+    inputField.value = task.title;
+    categorySelect.value = task.category;
+    textArea.value = task.description;
+    submitBtn.textContent = "Update Task";
+    isEditing = true;
+    currentEditId = task.id;
+    inputField.focus();
+}
+
+async function deleteTask(taskId) {
+    if (!confirm("Are you sure you want to delete this task?")) return;
+    
+    try {
+        await deleteTaskFromBackend(taskId);
+        taskList = taskList.filter(t => t.id !== taskId);
+        renderAllTasks();
+        showAlert("Task deleted successfully!", "success");
     } catch (error) {
         console.error("Error deleting task:", error);
     }
 }
 
-// -------------------- Category Filter Logic --------------------
-categoryFilters.forEach(button => {
-    button.addEventListener("click", () => {
-        const selectedCategory = button.id;
-        const allTasks = document.querySelectorAll(".TaskCard");
-
-        allTasks.forEach(task => {
-            if (selectedCategory === "All" || task.classList.contains(selectedCategory)) {
-                task.style.display = "block";
-            } else {
-                task.style.display = "none";
-            }
-        });
+// -------------------- Utility Functions --------------------
+function filterTasksByCategory(selectedCategory) {
+    const taskCards = document.querySelectorAll(".TaskCard");
+    
+    taskCards.forEach(task => {
+        if (selectedCategory === "All" || task.classList.contains(selectedCategory)) {
+            task.style.display = "block";
+        } else {
+            task.style.display = "none";
+        }
     });
-});
+}
+
+function showAlert(message, type) {
+    // Implement your alert system here
+    // Could be a toast notification, modal, or simple alert
+    alert(`${type.toUpperCase()}: ${message}`);
+}

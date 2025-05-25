@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const TaskSchema = new mongoose.Schema({
     id: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     title: {
         type: String,
@@ -19,7 +20,8 @@ const TaskSchema = new mongoose.Schema({
     },
     completed: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     }
 });
 
