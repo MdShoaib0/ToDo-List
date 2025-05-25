@@ -7,7 +7,7 @@ const prayerRoutes = require("./routes/prayerRoutes.js");
 
 // Initialize Express App
 const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 10000;
 
 // Middleware
 app.use(cors());
