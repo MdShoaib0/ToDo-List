@@ -14,10 +14,8 @@ const URL_ServerSide = "https://todo-list-backend-n5kz.onrender.com/tasks/";
 let taskList = []; // Array to store all tasks
 
 // -------------------- Load Tasks from Backend --------------------
-// document.addEventListener("DOMContentLoaded", async function () {
-// });
-
-await fetchTasksFromBackend();
+document.addEventListener("DOMContentLoaded", async function () {
+    await fetchTasksFromBackend();
 renderAllTasks();
 
 gsap.registerPlugin(ScrollTrigger);
@@ -81,6 +79,7 @@ tl2.from(".TitleTask", {
     duration: 0.7,
     ease: "power3.out"
 }, "-=0.7")
+});
 
 // -------------------- Fetch Tasks from Backend --------------------
 async function fetchTasksFromBackend() {
