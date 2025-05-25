@@ -5,13 +5,13 @@ const taskContainer = document.getElementById("TaskItem");
 const categorySelect = document.getElementById("Categories");
 const categoryFilters = document.querySelectorAll(".cat");
 const submitBtn = document.querySelector(".btn");
-const form = document.querySelector("form"); // Assuming you have a form element
+const form = document.querySelector("form");
 
 // -------------------- Configuration --------------------
-const URL_ServerSide = "https://todo-list-backend-n5kz.onrender.com/tasks";
+const URL_ServerSide = "http://localhost:7000/tasks";
 
 // -------------------- Global Variables --------------------
-let taskList = []; // Array to store all tasks
+let taskList = [];
 let isEditing = false;
 let currentEditId = null;
 
@@ -29,8 +29,6 @@ async function initializeApp() {
     setupAnimations();
 }
 
-// -------------------- Animation Setup --------------------
-function setupAnimations() {
     gsap.registerPlugin(ScrollTrigger);
     
     const tl = gsap.timeline();
@@ -84,6 +82,24 @@ function setupAnimations() {
         duration: 0.7,
         ease: "power3.out"
     }, "-=0.7");
+
+// -------------------- Utility Functions --------------------
+function getTaskId(task) {
+    return task._id || task.id;
+}
+
+function showAlert(message, type) {
+    // Implement your preferred alert/notification system here
+    alert(`${type.toUpperCase()}: ${message}`);
+}
+
+function resetForm() {
+    inputField.value = "";
+    textArea.value = "";
+    categorySelect.value = "";
+    submitBtn.textContent = "Add Task";
+    isEditing = false;
+    currentEditId = null;
 }
 
 // -------------------- API Functions --------------------
@@ -103,16 +119,21 @@ async function sendTaskToBackend(task) {
         const response = await fetch(URL_ServerSide, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
             body: JSON.stringify(task)
         });
-        
-        if (!response.ok) throw new Error("Failed to save task");
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to save task");
+        }
+
         return await response.json();
     } catch (error) {
         console.error("Error sending task:", error);
-        showAlert("Failed to save task. Please try again.", "error");
+        showAlert(error.message || "Failed to save task. Please try again.", "error");
         throw error;
     }
 }
@@ -126,7 +147,7 @@ async function updateTaskInBackend(task, id) {
             },
             body: JSON.stringify(task)
         });
-        
+
         if (!response.ok) throw new Error("Failed to update task");
         return await response.json();
     } catch (error) {
@@ -139,10 +160,14 @@ async function updateTaskInBackend(task, id) {
 async function deleteTaskFromBackend(id) {
     try {
         const response = await fetch(`${URL_ServerSide}/${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            },
         });
-        
+
         if (!response.ok) throw new Error("Failed to delete task");
+        return await response.json();
     } catch (error) {
         console.error("Error deleting task:", error);
         showAlert("Failed to delete task. Please try again.", "error");
@@ -153,7 +178,7 @@ async function deleteTaskFromBackend(id) {
 // -------------------- Task Management --------------------
 async function handleTaskSubmission(event) {
     event.preventDefault();
-    
+
     const title = inputField.value.trim();
     const description = textArea.value.trim();
     const category = categorySelect.value;
@@ -170,14 +195,16 @@ async function handleTaskSubmission(event) {
         completed: false
     };
 
+    submitBtn.disabled = true;
+
     try {
         if (isEditing) {
-            taskData.id = currentEditId;
             const updatedTask = await updateTaskInBackend(taskData, currentEditId);
-            taskList = taskList.map(task => task.id === currentEditId ? updatedTask : task);
+            taskList = taskList.map(task =>
+                getTaskId(task) === currentEditId ? updatedTask : task
+            );
             showAlert("Task updated successfully!", "success");
         } else {
-            taskData.id = Date.now();
             const newTask = await sendTaskToBackend(taskData);
             taskList.push(newTask);
             showAlert("Task added successfully!", "success");
@@ -186,22 +213,15 @@ async function handleTaskSubmission(event) {
         resetForm();
         renderAllTasks();
     } catch (error) {
-        // Error handling already done in API functions
+        console.error("Error saving task:", error);
+    } finally {
+        submitBtn.disabled = false;
     }
-}
-
-function resetForm() {
-    inputField.value = "";
-    textArea.value = "";
-    categorySelect.value = "";
-    submitBtn.textContent = "Add Task";
-    isEditing = false;
-    currentEditId = null;
 }
 
 function renderAllTasks() {
     taskContainer.innerHTML = "";
-    
+
     if (taskList.length === 0) {
         taskContainer.innerHTML = '<p class="empty-message">No tasks found. Add a new task!</p>';
         return;
@@ -214,8 +234,8 @@ function renderAllTasks() {
 
 function renderTask(task, index) {
     const taskCard = document.createElement("div");
-    taskCard.className = `TaskCard ${task.category}`;
-    taskCard.dataset.id = task.id;
+    taskCard.className = `TaskCard ${task.category.toLowerCase()}`;
+    taskCard.dataset.id = getTaskId(task);
     if (task.completed) {
         taskCard.classList.add("completed");
     }
@@ -239,22 +259,24 @@ function renderTask(task, index) {
     const editBtn = taskCard.querySelector(".editbtn");
     const deleteBtn = taskCard.querySelector(".deletebtn");
 
-    completeBtn.addEventListener("click", () => toggleTaskCompletion(task.id));
+    completeBtn.addEventListener("click", () => toggleTaskCompletion(getTaskId(task)));
     editBtn.addEventListener("click", () => prepareTaskEdit(task));
-    deleteBtn.addEventListener("click", () => deleteTask(task.id));
+    deleteBtn.addEventListener("click", () => deleteTask(getTaskId(task)));
 
     taskContainer.appendChild(taskCard);
 }
 
 async function toggleTaskCompletion(taskId) {
     try {
-        const task = taskList.find(t => t.id === taskId);
+        const task = taskList.find(t => getTaskId(t) === taskId);
         if (!task) return;
 
         const updatedTask = { ...task, completed: !task.completed };
         const result = await updateTaskInBackend(updatedTask, taskId);
-        
-        taskList = taskList.map(t => t.id === taskId ? result : t);
+
+        taskList = taskList.map(t =>
+            getTaskId(t) === taskId ? result : t
+        );
         renderAllTasks();
     } catch (error) {
         console.error("Error toggling task completion:", error);
@@ -267,16 +289,18 @@ function prepareTaskEdit(task) {
     textArea.value = task.description;
     submitBtn.textContent = "Update Task";
     isEditing = true;
-    currentEditId = task.id;
+    currentEditId = getTaskId(task);
     inputField.focus();
 }
 
 async function deleteTask(taskId) {
     if (!confirm("Are you sure you want to delete this task?")) return;
-    
+
     try {
         await deleteTaskFromBackend(taskId);
-        taskList = taskList.filter(t => t.id !== taskId);
+        taskList = taskList.filter(t =>
+            getTaskId(t) !== taskId
+        );
         renderAllTasks();
         showAlert("Task deleted successfully!", "success");
     } catch (error) {
@@ -287,9 +311,10 @@ async function deleteTask(taskId) {
 // -------------------- Utility Functions --------------------
 function filterTasksByCategory(selectedCategory) {
     const taskCards = document.querySelectorAll(".TaskCard");
-    
+
     taskCards.forEach(task => {
-        if (selectedCategory === "All" || task.classList.contains(selectedCategory)) {
+        if (selectedCategory.toLowerCase() === "all" ||
+            task.classList.contains(selectedCategory.toLowerCase())) {
             task.style.display = "block";
         } else {
             task.style.display = "none";
@@ -297,8 +322,7 @@ function filterTasksByCategory(selectedCategory) {
     });
 }
 
-function showAlert(message, type) {
-    // Implement your alert system here
-    // Could be a toast notification, modal, or simple alert
-    alert(`${type.toUpperCase()}: ${message}`);
+// Placeholder for animation setup
+function setupAnimations() {
+    // Implement your animation logic here
 }

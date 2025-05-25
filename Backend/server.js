@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Base Route
 app.get('/', (req, res) => {
     res.send('🚀 Server is up and running!');
 });
@@ -22,16 +22,16 @@ app.get('/', (req, res) => {
 app.use('/tasks', taskRoutes);
 app.use('/prayers', prayerRoutes);
 
-// Database Connection and Server Start
+// Connect to Database and Start Server
 DatabaseConnect()
     .then(() => {
         app.listen(PORT, () => {
-            console.log(`🚀 Server running on http://localhost:${PORT}`);
+            console.log(`🚀 Server running at http://localhost:${PORT}`);
         });
     })
     .catch(err => {
-        console.error('Failed to start server:', err);
+        console.error('❌ Failed to connect to database:', err);
         process.exit(1);
     });
 
-module.exports = app; // Export for testing if needed
+module.exports = app; // For testing purposes
